@@ -9,6 +9,12 @@ class Item
     {
     }
 
+    public function cart()
+    {
+        // this table need to have a pivot table relationship with cart and item ids
+        return $this->belongsToMany(Cart::class, 'cart_items_table', 'cart_id', 'item_id');
+    }
+
 }
 
 class Customer
@@ -36,6 +42,12 @@ class Address
                                 public string $state,
                                 public string $zip)
     {
+    }
+
+    public function customer()
+    {
+        // this table need to have a customer_id field
+        return $this->belongsTo(Customer::class);
     }
 }
 
@@ -81,5 +93,18 @@ class Cart
     public function getCustomer(): Customer
     {
         return $this->customer;
+    }
+
+    //******* Laravel style relationship
+    public function customer()
+    {
+        // this table need to have a customer_id field
+        return $this->hasOne(Customer::class);
+    }
+
+    public function cartItems()
+    {
+        // this table need to have a pivot table relationship with cart and item ids
+       return  $this->belongsToMany(Item::class, 'cart_items_table', 'item_id', 'cart_id');
     }
 }
