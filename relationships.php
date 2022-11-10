@@ -2,10 +2,12 @@
 
 class Item
 {
-    public int $id;
-    public string $name;
-    public int $quantity;
-    public float $price;
+    public function __construct(public int    $id,
+                                public string $name,
+                                public int    $quantity,
+                                public float  $price)
+    {
+    }
 
 }
 
@@ -15,7 +17,7 @@ class Customer
     public string $last_name;
     public array $addresses;
 
-    function getCFullName(): string
+    function getFullName(): string
     {
         return $this->first_name . " " . $this->last_name;
     }
@@ -28,11 +30,13 @@ class Customer
 
 class Address
 {
-    public string $line_1;
-    public string $line_2;
-    public string $city;
-    public string $state;
-    public string $zip;
+    public function __construct(public string $line_1,
+                                public string $line_2,
+                                public string $city,
+                                public string $state,
+                                public string $zip)
+    {
+    }
 }
 
 class Cart
@@ -44,7 +48,7 @@ class Cart
 
     public function getShippingCost(): void
     {
-        $this->shipping_cost = (new ShippingApi())->getCost($this->customer);
+        $this->shipping_cost = (new ShippingApi())->getCost($this->customer->addresses);
     }
 
     public function getItemsCost(): float|int
@@ -64,8 +68,18 @@ class Cart
         return $itemCost + $taxes + $this->shipping_cost;
     }
 
-    public function addItem(Item $item): void
+    public function setItem(Item $item): void
     {
         $this->items[] = $item;
+    }
+
+    public function setCustomer(Customer $customer): void
+    {
+        $this->customer = $customer;
+    }
+
+    public function getCustomer(): Customer
+    {
+        return $this->customer;
     }
 }
